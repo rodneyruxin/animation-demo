@@ -25,7 +25,8 @@ public class Mario extends MovingImage {
 	public void walk(int dir) {
 		// WALK!
 		//THIS MAKES IT NOT MERGE!!!
-		System.out.println("OLD DICKBALLS");
+		System.out.println("SOME OTHER DICKBALLS");
+		
 	}
 
 	public void jump() {
