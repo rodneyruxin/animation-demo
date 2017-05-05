@@ -18,6 +18,7 @@ public class GamePanel extends JPanel implements Runnable
 	private Rectangle screenRect;
 
 	private Mario mario;
+	private Enemy enemy;
 	private ArrayList<Shape> obstacles;
 	private double mX, mY, mouseAngle;
 
@@ -40,6 +41,7 @@ public class GamePanel extends JPanel implements Runnable
 		obstacles.add(new Rectangle(375,300,50,100));
 		obstacles.add(new Rectangle(300,250,200,50));
 		spawnNewMario();
+		spawnNewEnemy(100,100);
 		new Thread(this).start();
 	}
 
@@ -65,9 +67,15 @@ public class GamePanel extends JPanel implements Runnable
 		
 	
 		Point mousePoint = this.getMousePosition();
+		
+		try{
 		mX = mousePoint.getX();
 		mY = mousePoint.getY();
-
+		}
+		catch(NullPointerException e){
+			System.out.println("Mouse is out of bounds");
+		}
+		
 		double dY = mY - mario.getCenterY();
 		double dX = mX - mario.getCenterX();
 		
@@ -77,7 +85,7 @@ public class GamePanel extends JPanel implements Runnable
 		
 		
 		double scalar = dY/dX;
-		System.out.println(scalar);
+		
 		
 		if (mX < mario.getCenterX()){
 			mouseAngle = Math.PI + Math.atan(scalar);
@@ -85,11 +93,12 @@ public class GamePanel extends JPanel implements Runnable
 			mouseAngle = Math.atan(scalar);
 		}
 		
-
+		enemy.draw(g2, null);
 		
 		g2.rotate(mouseAngle, mario.getCenterX(), mario.getCenterY());
 		
 		mario.draw(g2, null);
+		
 		// TODO Add any custom drawings here
 	}
 
@@ -97,6 +106,11 @@ public class GamePanel extends JPanel implements Runnable
 	public void spawnNewMario() {
 		mario = new Mario(DRAWING_WIDTH/2-Mario.MARIO_WIDTH/2,50);
 	}
+	
+	public void spawnNewEnemy(int locX, int locY) {
+		enemy = new Enemy(locX,locY);
+	}
+
 
 	public KeyHandler getKeyHandler() {
 		return keyControl;
@@ -111,13 +125,17 @@ public class GamePanel extends JPanel implements Runnable
 
 
 
-			if (keyControl.isPressed(KeyEvent.VK_LEFT))
+			if (keyControl.isPressed(KeyEvent.VK_A))
 				mario.walk(-1);
-			if (keyControl.isPressed(KeyEvent.VK_RIGHT))
+			if (keyControl.isPressed(KeyEvent.VK_D))
 				mario.walk(1);
-			if (keyControl.isPressed(KeyEvent.VK_UP))
-				mario.jump();
-
+			//if (keyControl.isPressed(KeyEvent.VK_UP))
+				//mario.jump();
+			if (keyControl.isPressed(KeyEvent.VK_W))
+				mario.walk(-2);
+			if (keyControl.isPressed(KeyEvent.VK_S))
+				mario.walk(2);
+			
 			mario.act(obstacles);
 
 			if (!screenRect.intersects(mario))

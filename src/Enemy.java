@@ -10,35 +10,29 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
-public class Mario extends MovingImage {
+public class Enemy extends MovingImage {
 
-	public static final int MARIO_WIDTH = 40;
-	public static final int MARIO_HEIGHT = 60;
+	public static final int ENEMY_WIDTH = 40;
+	public static final int ENEMY_HEIGHT = 60;
 	
 	private double dX, dY;
 	private BufferedImage img;
 
 	
-	public Mario(int x, int y) {
-		super("survivor-idle_rifle_0.png", x, y, MARIO_WIDTH, MARIO_HEIGHT);
+	public Enemy(int x, int y) {
+		super("survivor-idle_rifle_0.png", x, y, ENEMY_WIDTH, ENEMY_HEIGHT);
 		dX = 0;
 		dY = 0;
-		loadImage("survivor-idle_rifle_0.png");
+		loadImage("mario.png");
 	}
 
 	// METHODS
 	public void walk(int dir) {
-		
-		if(dir == -2 || dir == 2){
-			int newdir = dir/2;
-			y += newdir*10;
-		}
-		if(dir == -1 || dir == 1){
-		x+= dir*10;
-		}
-		
 		// WALK!
+		//THIS MAKES IT NOT MERGE!!!
+		
 	}
+	
 	public BufferedImage getImage(){
 		return img;
 	}
