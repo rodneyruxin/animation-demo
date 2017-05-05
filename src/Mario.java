@@ -48,10 +48,13 @@ public class Mario extends MovingImage {
 	}
 
 	public void act(ArrayList<Shape> obstacles) {
-		dY += 0.5;
+		//dY += 0.5;
 		
 		
 	}
+	
+	
+	
 	
 	private void loadImage(String filename){
 		img = null;

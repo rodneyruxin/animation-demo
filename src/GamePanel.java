@@ -3,6 +3,7 @@ import java.awt.event.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
 import javax.swing.*;
@@ -18,11 +19,12 @@ public class GamePanel extends JPanel implements Runnable
 	private Rectangle screenRect;
 
 	private Mario mario;
-	private Enemy enemy;
+	private Enemy enemy1;
 	private ArrayList<Shape> obstacles;
 	private double mX, mY, mouseAngle;
 
 	private KeyHandler keyControl;
+	private MouseHandler mouseControl;
 
 
 	public GamePanel () {
@@ -80,7 +82,15 @@ public class GamePanel extends JPanel implements Runnable
 		double dX = mX - mario.getCenterX();
 		
 		Line2D.Double trackingLine = new Line2D.Double(mX, mY, mario.getCenterX(), mario.getCenterY());
-
+		
+		//idk if this belongs here
+		if(trackingLine.intersects(enemy1.getFrame())){
+			System.out.println("hit!");
+			g2.draw( new Rectangle2D.Double(mX,mY,6,6));
+			
+		}
+		
+		
 		g2.draw(trackingLine);
 		
 		
@@ -93,7 +103,7 @@ public class GamePanel extends JPanel implements Runnable
 			mouseAngle = Math.atan(scalar);
 		}
 		
-		enemy.draw(g2, null);
+		enemy1.draw(g2, null);
 		
 		g2.rotate(mouseAngle, mario.getCenterX(), mario.getCenterY());
 		
@@ -108,7 +118,7 @@ public class GamePanel extends JPanel implements Runnable
 	}
 	
 	public void spawnNewEnemy(int locX, int locY) {
-		enemy = new Enemy(locX,locY);
+		enemy1 = new Enemy(locX,locY);
 	}
 
 
@@ -136,7 +146,13 @@ public class GamePanel extends JPanel implements Runnable
 			if (keyControl.isPressed(KeyEvent.VK_S))
 				mario.walk(2);
 			
+			
+			//if(mouseControl.isClicked(MouseEvent.BUTTON1)){
+			//	System.out.println("??");
+			//}
 			mario.act(obstacles);
+			enemy1.act(obstacles);
+
 
 			if (!screenRect.intersects(mario))
 				spawnNewMario();
@@ -180,6 +196,81 @@ public class GamePanel extends JPanel implements Runnable
 		public boolean isPressed(int code) {
 			return keys.contains(code);
 		}
+	}
+	
+	
+	//I have no clue how mouse handler works
+	public class MouseHandler implements MouseListener {
+		private int mX;
+		private int mY;
+		private ArrayList<Integer> mouses;
+
+		public MouseHandler() {
+			mouses = new ArrayList<Integer>();
+		}
+
+		
+		
+		public boolean isClicked(int code) {
+			return mouses.contains(code);
+		}
+		public void mouseClicked(MouseEvent e) {
+			// TODO Auto-generated method stub
+			//mX = e.getX();
+			//mY = e.getY();
+			System.out.println("hi");
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseExited(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+/*		private ArrayList<Integer> keys;
+
+		public KeyHandler() {
+			keys = new ArrayList<Integer>();
+		*/
+
+		/*public void keyPressed(KeyEvent e) {
+			keys.add(e.getKeyCode());
+		}*/
+
+//		public void keyReleased(KeyEvent e) {
+//			Integer code = e.getKeyCode();
+//			while(keys.contains(code))
+//				keys.remove(code);
+//		}
+//
+//		public void keyTyped(KeyEvent e) {
+//
+//		}
+//
+//		public boolean isPressed(int code) {
+//			return keys.contains(code);
+//		}
+
+		
+		
 	}
 
 }

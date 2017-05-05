@@ -42,7 +42,8 @@ public class Enemy extends MovingImage {
 	}
 
 	public void act(ArrayList<Shape> obstacles) {
-		dY += 0.5;
+		//dY += 0.5;
+		x += 0.5;
 		
 		
 	}
@@ -56,5 +57,8 @@ public class Enemy extends MovingImage {
 		}
 	}
 
+	public Rectangle2D.Double makeHitBox(){
+		return  new Rectangle2D.Double(x, y, ENEMY_WIDTH, ENEMY_HEIGHT);
+	}
 
 }
