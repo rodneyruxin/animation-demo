@@ -61,21 +61,33 @@ public class GamePanel extends JPanel implements Runnable
 		g.setColor(new Color(205,102,29));
 		for (Shape s : obstacles) {
 			g2.fill(s);
-		}	
+		}
 		
-//		Point mousePoint = this.getMousePosition();
-//		mX = mousePoint.getX();
-//		mY = mousePoint.getY();
-//
-//
-//		Line2D.Double trackingLine = new Line2D.Double(mX, mY, mario.getCenterX(), mario.getCenterY());
-//
-//		g2.draw(trackingLine);
-//		
-//		double scalar = (mario.getCenterY()-mY)/(mario.getCenterX()-mX);
-//		double mouseAngle = Math.atan(scalar);
-//		
-		g2.rotate(Math.PI/4);
+	
+		Point mousePoint = this.getMousePosition();
+		mX = mousePoint.getX();
+		mY = mousePoint.getY();
+
+		double dY = mY - mario.getCenterY();
+		double dX = mX - mario.getCenterX();
+		
+		Line2D.Double trackingLine = new Line2D.Double(mX, mY, mario.getCenterX(), mario.getCenterY());
+
+		g2.draw(trackingLine);
+		
+		
+		double scalar = dY/dX;
+		System.out.println(scalar);
+		
+		if (mX < mario.getCenterX()){
+			mouseAngle = Math.PI + Math.atan(scalar);
+		} else {
+			mouseAngle = Math.atan(scalar);
+		}
+		
+
+		
+		g2.rotate(mouseAngle, mario.getCenterX(), mario.getCenterY());
 		
 		mario.draw(g2, null);
 		// TODO Add any custom drawings here
