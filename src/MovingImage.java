@@ -1,8 +1,12 @@
 
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.*;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 /*
@@ -51,6 +55,17 @@ public class MovingImage extends Rectangle2D.Double {
 	
 	public void draw(Graphics g, ImageObserver io) {
 		g.drawImage(image,(int)x,(int)y,(int)width,(int)height,io);
+		AffineTransform at = AffineTransform.getTranslateInstance(100,100);
+	}
+	
+	private BufferedImage loadImage(String filename){
+		BufferedImage img = null;
+		try {
+			img = ImageIO.read(new File(filename));
+		} catch (IOException e){
+			
+		}
+		return img;
 	}
 	
 	

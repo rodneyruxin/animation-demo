@@ -8,7 +8,7 @@ public class Main extends JFrame {
 	
 	public Main(String title) {
 		super(title);
-		setBounds(100, 100, 800, 600);
+		setBounds(0, 0, 800, 600);
 	    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	    
 	    cardPanel = new JPanel();
@@ -24,6 +24,8 @@ public class Main extends JFrame {
 	    cardPanel.add(panel2,"2");
 	    
 	    add(cardPanel);
+	    
+	    
 	
 	    setVisible(true);
 	}
