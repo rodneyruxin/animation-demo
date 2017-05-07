@@ -23,6 +23,7 @@ public class GamePanel extends JPanel implements Runnable
 	private ArrayList<Shape> obstacles;
 	private double mX, mY, mouseAngle;
 
+	
 	private KeyHandler keyControl;
 	private MouseHandler mouseControl;
 
@@ -34,6 +35,7 @@ public class GamePanel extends JPanel implements Runnable
 		mY = MouseInfo.getPointerInfo().getLocation().getY();
 
 		keyControl = new KeyHandler();
+		mouseControl = new MouseHandler();
 		setBackground(Color.CYAN);
 		screenRect = new Rectangle(0,0,DRAWING_WIDTH,DRAWING_HEIGHT);
 		obstacles = new ArrayList<Shape>();
@@ -84,10 +86,19 @@ public class GamePanel extends JPanel implements Runnable
 		Line2D.Double trackingLine = new Line2D.Double(mX, mY, mario.getCenterX(), mario.getCenterY());
 		
 		//idk if this belongs here
-		if(trackingLine.intersects(enemy1.getFrame())){
-			System.out.println("hit!");
+		//basically its a hit scan detection, if the tracking line is in contact with the enemy, you can hit the enemey
+		
+		//this way you can make your own hitbox
+		//if(trackingLine.intersects(enemy1.makeHitBox())){
+		if(trackingLine.intersects(enemy1.getBounds2D())){
+			//System.out.println("hit!");
+			enemy1.setIsHit(true);
+			//draws a box where the eney can be hit
 			g2.draw( new Rectangle2D.Double(mX,mY,6,6));
 			
+		}
+		else{
+			enemy1.setIsHit(false);
 		}
 		
 		
@@ -125,7 +136,10 @@ public class GamePanel extends JPanel implements Runnable
 	public KeyHandler getKeyHandler() {
 		return keyControl;
 	}
-
+	
+	public MouseHandler getMouseHandler(){
+		return mouseControl;
+	}
 
 	public void run() {
 		while (true) { // Modify this to allow quitting
@@ -147,9 +161,13 @@ public class GamePanel extends JPanel implements Runnable
 				mario.walk(2);
 			
 			
-			//if(mouseControl.isClicked(MouseEvent.BUTTON1)){
-			//	System.out.println("??");
-			//}
+			if(mouseControl.isClicked(MouseEvent.BUTTON1)){
+				if(enemy1.getIsHit()){
+				enemy1.removeEnemy();
+				System.out.println("??");
+				}
+			}
+			
 			mario.act(obstacles);
 			enemy1.act(obstacles);
 
@@ -159,7 +177,7 @@ public class GamePanel extends JPanel implements Runnable
 
 			repaint();
 
-			long waitTime = 17 - (System.currentTimeMillis()-startTime);
+			long waitTime = 10 - (System.currentTimeMillis()-startTime);
 			try {
 				if (waitTime > 0)
 					Thread.sleep(waitTime);
@@ -181,6 +199,7 @@ public class GamePanel extends JPanel implements Runnable
 
 		public void keyPressed(KeyEvent e) {
 			keys.add(e.getKeyCode());
+			
 		}
 
 		public void keyReleased(KeyEvent e) {
@@ -218,13 +237,14 @@ public class GamePanel extends JPanel implements Runnable
 			// TODO Auto-generated method stub
 			//mX = e.getX();
 			//mY = e.getY();
-			System.out.println("hi");
+			//mouses.add(e.getButton());
+			//System.out.println("hi");
 		}
 
 		@Override
 		public void mouseEntered(MouseEvent e) {
 			// TODO Auto-generated method stub
-			
+		
 		}
 
 		@Override
@@ -236,13 +256,16 @@ public class GamePanel extends JPanel implements Runnable
 		@Override
 		public void mousePressed(MouseEvent e) {
 			// TODO Auto-generated method stub
-			
+			mouses.add(e.getButton());
+			System.out.println("hi");
 		}
 
 		@Override
 		public void mouseReleased(MouseEvent e) {
 			// TODO Auto-generated method stub
-			
+			Integer code = e.getButton();
+			while(mouses.contains(code))
+				mouses.remove(code);
 		}
 
 /*		private ArrayList<Integer> keys;

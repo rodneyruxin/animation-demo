@@ -17,7 +17,10 @@ public class Enemy extends MovingImage {
 	
 	private double dX, dY;
 	private BufferedImage img;
-
+	private boolean isHit;
+	//the hitbox field(rect) should move with the image, so that way you won't have to create new hitboxes every second
+	//not implemented yet
+	private Rectangle2D.Double hitbox;
 	
 	public Enemy(int x, int y) {
 		super("survivor-idle_rifle_0.png", x, y, ENEMY_WIDTH, ENEMY_HEIGHT);
@@ -56,9 +59,29 @@ public class Enemy extends MovingImage {
 			
 		}
 	}
-
+	
+	//should only be called once within this class for most efficiency
 	public Rectangle2D.Double makeHitBox(){
 		return  new Rectangle2D.Double(x, y, ENEMY_WIDTH, ENEMY_HEIGHT);
+	}
+	
+	public void setIsHit(boolean hit){
+		isHit = hit;
+	}
+	public boolean getIsHit(){
+	return isHit;
+	}
+	
+	//doesn't reallly work
+	public void removeEnemy(){
+		hitbox = null;
+		img = null;
+		dX = 0;
+		dY = 0;
+		
+		
+		x= -100;
+		System.out.println("remove");
 	}
 
 }

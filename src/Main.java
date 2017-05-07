@@ -19,7 +19,8 @@ public class Main extends JFrame {
 	    GamePanel panel2 = new GamePanel();
 	    
 	    addKeyListener(panel2.getKeyHandler());
-	
+	    addMouseListener(panel2.getMouseHandler());
+	    
 	    cardPanel.add(panel1,"1");
 	    cardPanel.add(panel2,"2");
 	    
