@@ -131,6 +131,10 @@ public class GamePanel extends JPanel implements Runnable
 	public void spawnNewEnemy(int locX, int locY) {
 		enemy1 = new Enemy(locX,locY);
 	}
+	
+	public void removeEnemy(){
+		enemy1 = null;
+	}
 
 
 	public KeyHandler getKeyHandler() {
@@ -163,8 +167,10 @@ public class GamePanel extends JPanel implements Runnable
 			
 			if(mouseControl.isClicked(MouseEvent.BUTTON1)){
 				if(enemy1.getIsHit()){
-				enemy1.removeEnemy();
-				System.out.println("??");
+					removeEnemy();
+					//Spawns new enemy and if we do not spawn one right away it crashes
+					spawnNewEnemy(0, 100);
+					System.out.println("??");
 				}
 			}
 			

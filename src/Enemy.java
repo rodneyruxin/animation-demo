@@ -73,9 +73,10 @@ public class Enemy extends MovingImage {
 	}
 	
 	//doesn't reallly work
+	/*
 	public void removeEnemy(){
-		hitbox = null;
-		img = null;
+		//hitbox = null;
+		//img = null;
 		dX = 0;
 		dY = 0;
 		
@@ -83,5 +84,6 @@ public class Enemy extends MovingImage {
 		x= -100;
 		System.out.println("remove");
 	}
-
+	*/
+	
 }
