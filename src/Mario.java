@@ -31,10 +31,10 @@ public class Mario extends MovingImage {
 		
 		if(dir == -2 || dir == 2){
 			int newdir = dir/2;
-			y += newdir*10;
+			y += newdir*4;
 		}
 		if(dir == -1 || dir == 1){
-		x+= dir*10;
+		x+= dir*4;
 		}
 		
 		// WALK!
