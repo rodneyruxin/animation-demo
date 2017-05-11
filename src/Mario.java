@@ -10,7 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
-public class Mario extends MovingImage {
+public class Mario extends Character {
 
 	public static final int MARIO_WIDTH = 40;
 	public static final int MARIO_HEIGHT = 60;
@@ -33,8 +33,10 @@ public class Mario extends MovingImage {
 
 	// METHODS
 	public void walk(int dir) {
+		super.walk(dir);
 		
-		if(dir == -2 || dir == 2){
+		//old walk code, more snappy
+		/*if(dir == -2 || dir == 2){
 			
 			int newdir = dir/2;
 			
@@ -44,15 +46,15 @@ public class Mario extends MovingImage {
 		
 	
 		if(dir == -1 || dir == 1){
-			/*
+			
 			if (xVelocity <= 4 && xVelocity >= -4){
 				xVelocity += dir;
 			}
 		x+= dir*xVelocity;
-		*/
+		
 			x += dir*4;
 		}
-		
+		*/
 		
 		// WALK!
 	}
@@ -66,7 +68,7 @@ public class Mario extends MovingImage {
 
 	public void act(ArrayList<Shape> obstacles) {
 		//dY += 0.5;
-		
+		super.act(obstacles);
 		
 	}
 	

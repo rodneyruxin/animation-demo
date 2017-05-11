@@ -15,8 +15,8 @@ public class Character extends MovingImage {
 	private double gravity;
 	private double jumpStrength;
 
-	public Character(int x, int y) {
-		super("mario.png", x, y, MARIO_WIDTH, MARIO_HEIGHT);
+	public Character(String name, int x, int y, int width, int height) {
+		super(name, x, y, width, height);
 		xVelocity = 0;
 		yVelocity = 0;
 		//onASurface = false;
@@ -38,7 +38,7 @@ public class Character extends MovingImage {
 			//y += newdir*4;
 			if (yVelocity <= 4 && yVelocity >= -4){
 				yVelocity += newdir;
-			//y += newdir*yVelocity;
+				//y += newdir;
 			}
 		}
 		
@@ -70,6 +70,9 @@ public class Character extends MovingImage {
 		// ***********Y AXIS***********
 
 		//yVelocity += gravity; // GRAVITY
+		//yVelocity = 1;
+		
+		yVelocity *= friction;
 		double yCoord2 = yCoord + yVelocity;
 
 		Rectangle2D.Double strechY = new Rectangle2D.Double(xCoord,Math.min(yCoord,yCoord2),width,height+Math.abs(yVelocity));
@@ -78,6 +81,12 @@ public class Character extends MovingImage {
 		
 		//Problem is that is is testing to see if the mario is on the surface,
 		//if mario is not on a surface, he keeps going.
+		
+		
+		
+		
+		
+		
 		
 		if (yVelocity > 0) {
 			Shape standingSurface = null;
@@ -111,6 +120,44 @@ public class Character extends MovingImage {
 
 		if (Math.abs(yVelocity) < .2)
 			yVelocity = 0;
+		
+		
+		/*if (yVelocity > 0) {
+			Shape standingSurface = null;
+			for (Shape s : obstacles) {
+				if (s.intersects(strechY)) {
+					standingSurface = s;
+					yVelocity = 0;
+				}
+			}
+			if (standingSurface != null) {
+				Rectangle r = standingSurface.getBounds();
+				yCoord2 = r.getX()-width;
+			}
+		} else if (yVelocity < 0) {
+			Shape headSurface = null;
+			for (Shape s : obstacles) {
+				if (s.intersects(strechY)) {
+					headSurface = s;
+					yVelocity = 0;
+				}
+			}
+			if (headSurface != null) {
+				Rectangle r = headSurface.getBounds();
+				yCoord2 = r.getX()+r.getWidth();
+			}
+		}
+
+
+		if (Math.abs(yVelocity) < .2)
+			yVelocity = 0;
+*/
+		
+		
+		
+		
+		
+		
 
 		// ***********X AXIS***********
 

@@ -10,7 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
-public class Enemy extends MovingImage {
+public class Enemy extends Character {
 
 	public static final int ENEMY_WIDTH = 40;
 	public static final int ENEMY_HEIGHT = 60;
@@ -33,7 +33,7 @@ public class Enemy extends MovingImage {
 	public void walk(int dir) {
 		// WALK!
 		//THIS MAKES IT NOT MERGE!!!
-		
+		super.walk(dir);
 	}
 	
 	public BufferedImage getImage(){
@@ -46,7 +46,8 @@ public class Enemy extends MovingImage {
 
 	public void act(ArrayList<Shape> obstacles) {
 		//dY += 0.5;
-		x += 0.5;
+		super.act(obstacles);
+		walk(2);
 		
 		
 	}
@@ -80,7 +81,8 @@ public class Enemy extends MovingImage {
 		dY = 0;
 		
 		
-		x= -100;
+		x= 90;
+		y = 30;
 		System.out.println("remove");
 	}
 

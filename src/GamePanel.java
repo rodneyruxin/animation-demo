@@ -19,7 +19,7 @@ public class GamePanel extends JPanel implements Runnable
 	private Rectangle screenRect;
 
 	private Mario mario;
-	private Character cmario;
+	//private Character cmario;
 
 	private Enemy enemy1;
 	private ArrayList<Shape> obstacles;
@@ -47,8 +47,8 @@ public class GamePanel extends JPanel implements Runnable
 		obstacles.add(new Rectangle(375,300,50,100));
 		obstacles.add(new Rectangle(300,250,200,50));
 		spawnNewMario();
-		spawnNewEnemy(100,100);
-		spawnNewCharacter(100,200);
+		spawnNewEnemy(90,100);
+		//spawnNewCharacter(100,200);
 		new Thread(this).start();
 	}
 
@@ -118,7 +118,7 @@ public class GamePanel extends JPanel implements Runnable
 		}
 		
 		enemy1.draw(g2, null);
-		cmario.draw(g2, null);
+		//cmario.draw(g2, null);
 		
 		g2.rotate(mouseAngle, mario.getCenterX(), mario.getCenterY());
 		
@@ -137,9 +137,9 @@ public class GamePanel extends JPanel implements Runnable
 		enemy1 = new Enemy(locX,locY);
 	}
 
-	public void spawnNewCharacter(int locX, int locY) {
-		cmario = new Character(locX,locY);
-	}
+	//public void spawnNewCharacter(int locX, int locY) {
+		//cmario = new Character(locX,locY);
+	//}
 
 	public KeyHandler getKeyHandler() {
 		return keyControl;
@@ -158,31 +158,32 @@ public class GamePanel extends JPanel implements Runnable
 
 
 			if (keyControl.isPressed(KeyEvent.VK_A))
-				cmario.walk(-1);
+				mario.walk(-1);
 			if (keyControl.isPressed(KeyEvent.VK_D))
-				cmario.walk(1);
+				mario.walk(1);
 			//if (keyControl.isPressed(KeyEvent.VK_UP))
 				//mario.jump();
 			if (keyControl.isPressed(KeyEvent.VK_W))
-				cmario.walk(-2);
+				mario.walk(-2);
 			if (keyControl.isPressed(KeyEvent.VK_S))
-				cmario.walk(2);
+				mario.walk(2);
 			
 			
 			if(mouseControl.isClicked(MouseEvent.BUTTON1)){
 				if(enemy1.getIsHit()){
 				enemy1.removeEnemy();
-				System.out.println("??");
+				
 				}
 			}
 			
 			mario.act(obstacles);
 			enemy1.act(obstacles);
-			cmario.act(obstacles);
+			//cmario.act(obstacles);
 
 
 			if (!screenRect.intersects(mario))
 				spawnNewMario();
+			
 
 			repaint();
 
