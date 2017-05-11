@@ -88,6 +88,15 @@ public class GamePanel extends JPanel implements Runnable
 		
 		Line2D.Double trackingLine = new Line2D.Double(mX, mY, mario.getCenterX(), mario.getCenterY());
 		
+		for(Shape s: obstacles){
+			
+			if( trackingLine.intersects((Rectangle2D)s)){
+				//basically make a new line that goes from the center of the character to the intersection point of the rectangle and trackiong line
+				trackingLine = new Line2D.Double(s.getBounds2D().getX(), s.getBounds2D().getY(), mario.getCenterX(), mario.getCenterY());
+			}
+		}
+		
+		
 		//idk if this belongs here
 		//basically its a hit scan detection, if the tracking line is in contact with the enemy, you can hit the enemey
 		

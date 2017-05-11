@@ -95,7 +95,6 @@ public class Character extends MovingImage {
 					//onASurface = true;
 					standingSurface = s;
 					yVelocity = 0;
-					System.out.println("intestescts");
 
 				}
 			}

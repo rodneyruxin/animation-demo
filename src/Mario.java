@@ -22,6 +22,9 @@ public class Mario extends Character {
 	private double gravity;
 	private double jumpStrength;
 	private BufferedImage img;
+	
+	
+	
 
 	
 	public Mario(int x, int y) {
@@ -70,6 +73,8 @@ public class Mario extends Character {
 		//dY += 0.5;
 		super.act(obstacles);
 		
+		
+	
 	}
 	
 	
