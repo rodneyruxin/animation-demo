@@ -19,6 +19,8 @@ public class GamePanel extends JPanel implements Runnable
 	private Rectangle screenRect;
 
 	private Mario mario;
+	private Character cmario;
+
 	private Enemy enemy1;
 	private ArrayList<Shape> obstacles;
 	private double mX, mY, mouseAngle;
@@ -46,6 +48,7 @@ public class GamePanel extends JPanel implements Runnable
 		obstacles.add(new Rectangle(300,250,200,50));
 		spawnNewMario();
 		spawnNewEnemy(100,100);
+		spawnNewCharacter(100,200);
 		new Thread(this).start();
 	}
 
@@ -115,10 +118,12 @@ public class GamePanel extends JPanel implements Runnable
 		}
 		
 		enemy1.draw(g2, null);
+		cmario.draw(g2, null);
 		
 		g2.rotate(mouseAngle, mario.getCenterX(), mario.getCenterY());
 		
 		mario.draw(g2, null);
+		
 		
 		// TODO Add any custom drawings here
 	}
@@ -132,6 +137,9 @@ public class GamePanel extends JPanel implements Runnable
 		enemy1 = new Enemy(locX,locY);
 	}
 
+	public void spawnNewCharacter(int locX, int locY) {
+		cmario = new Character(locX,locY);
+	}
 
 	public KeyHandler getKeyHandler() {
 		return keyControl;
@@ -150,15 +158,15 @@ public class GamePanel extends JPanel implements Runnable
 
 
 			if (keyControl.isPressed(KeyEvent.VK_A))
-				mario.walk(-1);
+				cmario.walk(-1);
 			if (keyControl.isPressed(KeyEvent.VK_D))
-				mario.walk(1);
+				cmario.walk(1);
 			//if (keyControl.isPressed(KeyEvent.VK_UP))
 				//mario.jump();
 			if (keyControl.isPressed(KeyEvent.VK_W))
-				mario.walk(-2);
+				cmario.walk(-2);
 			if (keyControl.isPressed(KeyEvent.VK_S))
-				mario.walk(2);
+				cmario.walk(2);
 			
 			
 			if(mouseControl.isClicked(MouseEvent.BUTTON1)){
@@ -170,6 +178,7 @@ public class GamePanel extends JPanel implements Runnable
 			
 			mario.act(obstacles);
 			enemy1.act(obstacles);
+			cmario.act(obstacles);
 
 
 			if (!screenRect.intersects(mario))
