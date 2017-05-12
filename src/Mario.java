@@ -1,6 +1,7 @@
 
 
 import java.awt.*;
+import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 
 import javax.imageio.ImageIO;
@@ -23,6 +24,8 @@ public class Mario extends Character {
 	private double jumpStrength;
 	private BufferedImage img;
 	
+	private Line2D.Double trackingLine;
+	private double mouseX, mouseY;
 	
 	
 
@@ -32,6 +35,9 @@ public class Mario extends Character {
 		xVelocity = 0;
 		yVelocity = 0;
 		loadImage("survivor-idle_rifle_0.png");
+		
+		mouseX = MouseInfo.getPointerInfo().getLocation().getX();
+		mouseY = MouseInfo.getPointerInfo().getLocation().getY();
 	}
 
 	// METHODS
@@ -72,7 +78,7 @@ public class Mario extends Character {
 	public void act(ArrayList<Shape> obstacles) {
 		//dY += 0.5;
 		super.act(obstacles);
-		
+		generateTrackingLine(obstacles);
 		
 	
 	}
@@ -88,6 +94,40 @@ public class Mario extends Character {
 			
 		}
 	}
+	
+	public Line2D.Double generateTrackingLine(ArrayList<Shape> obstacles){
+		
+		
+		
+	
+		
+		try{
+			mouseX = MouseInfo.getPointerInfo().getLocation().getX();
+			mouseY = MouseInfo.getPointerInfo().getLocation().getY();
+		}
+		catch(NullPointerException e){
+			System.out.println("Mouse is out of bounds");
+		}
+		
+		//double dY = mouseY - this.getCenterY();
+		//double dX = mouseX - this.getCenterX();
+		
+		trackingLine = new Line2D.Double(mouseX, mouseY, this.getCenterX(), this.getCenterY());
+		
+		for(Shape s: obstacles){
+			
+			if( trackingLine.intersects((Rectangle2D)s)){
+				//basically make a new line that goes from the center of the character to the intersection point of the rectangle and trackiong line
+				trackingLine = new Line2D.Double(mouseX, mouseY, this.getCenterX(), this.getCenterY());
+				
+			}
+		}
+		
+		return trackingLine;
+		
+	}
 
-
+	
+	
+	
 }

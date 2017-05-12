@@ -85,5 +85,16 @@ public class Enemy extends Character {
 		y = 30;
 		System.out.println("remove");
 	}
+	
+	public void hitByBullet(ArrayList<Bullet> bullets){
+		for (Bullet b : bullets) {
+			if(this.getBounds2D().intersects(b.getBounds2D())){
+				isHit = true;
+			}
+				
+			}
+		
+		
+	}
 
 }

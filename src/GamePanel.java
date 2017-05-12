@@ -5,7 +5,10 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import java.util.*;
@@ -16,6 +19,10 @@ public class GamePanel extends JPanel implements Runnable
 	public static final int DRAWING_WIDTH = 800;
 	public static final int DRAWING_HEIGHT = 600;
 
+	private long timeOfLastProjectile = 0;
+	private long timeNow = 0;
+	private long time = 0;
+	
 	private Rectangle screenRect;
 
 	private Mario mario;
@@ -29,6 +36,9 @@ public class GamePanel extends JPanel implements Runnable
 	private KeyHandler keyControl;
 	private MouseHandler mouseControl;
 
+	private Image cursorImage;
+	
+	private ArrayList<Bullet> bullets;
 
 	public GamePanel () {
 		super();
@@ -46,9 +56,24 @@ public class GamePanel extends JPanel implements Runnable
 		obstacles.add(new Rectangle(700,250,100,50));
 		obstacles.add(new Rectangle(375,300,50,100));
 		obstacles.add(new Rectangle(300,250,200,50));
+		
 		spawnNewMario();
 		spawnNewEnemy(90,100);
 		//spawnNewCharacter(100,200);
+		bullets = new ArrayList<Bullet>();
+		
+		try {
+			cursorImage = ImageIO.read(new File("crosshair.png"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		Toolkit toolkit = Toolkit.getDefaultToolkit();
+		Cursor c = toolkit.createCustomCursor(cursorImage , new Point(16, 16), "img");
+		setCursor (c);
+		
+		
 		new Thread(this).start();
 	}
 
@@ -86,6 +111,9 @@ public class GamePanel extends JPanel implements Runnable
 		double dY = mY - mario.getCenterY();
 		double dX = mX - mario.getCenterX();
 		
+		
+		//if you generate the tracking Line in gamepanel, it doesn't get screwed up when  you move the screen around
+		/*
 		Line2D.Double trackingLine = new Line2D.Double(mX, mY, mario.getCenterX(), mario.getCenterY());
 		
 		for(Shape s: obstacles){
@@ -95,6 +123,7 @@ public class GamePanel extends JPanel implements Runnable
 				trackingLine = new Line2D.Double(s.getBounds2D().getX(), s.getBounds2D().getY(), mario.getCenterX(), mario.getCenterY());
 			}
 		}
+		*/
 		
 		
 		//idk if this belongs here
@@ -102,19 +131,29 @@ public class GamePanel extends JPanel implements Runnable
 		
 		//this way you can make your own hitbox
 		//if(trackingLine.intersects(enemy1.makeHitBox())){
-		if(trackingLine.intersects(enemy1.getBounds2D())){
-			//System.out.println("hit!");
+		for(Bullet b: bullets){
+			b.hitObstacle(obstacles);
+		if(b != null && b.getBounds2D().intersects(enemy1.getBounds2D())){
 			enemy1.setIsHit(true);
+		}else{
+			enemy1.setIsHit(false);
+
+		}
+		}
+		if(mario.generateTrackingLine(obstacles).intersects(enemy1.getBounds2D())){
+			//System.out.println("hit!");
+			//enemy1.setIsHit(true);
 			//draws a box where the eney can be hit
-			g2.draw( new Rectangle2D.Double(mX,mY,6,6));
+			//g2.draw( new Rectangle2D.Double(mX,mY,6,6));
 			
 		}
 		else{
 			enemy1.setIsHit(false);
 		}
 		
-		
-		g2.draw(trackingLine);
+		//g2.draw(trackingLine);
+
+		g2.draw(mario.generateTrackingLine(obstacles));
 		
 		
 		double scalar = dY/dX;
@@ -128,7 +167,13 @@ public class GamePanel extends JPanel implements Runnable
 		
 		enemy1.draw(g2, null);
 		//cmario.draw(g2, null);
-		
+		if(bullets.size() > 0){
+			
+			//sometimes has a concurrentModificationException
+		for(Bullet b: bullets){
+			b.draw(g2, null);
+		}
+		}
 		g2.rotate(mouseAngle, mario.getCenterX(), mario.getCenterY());
 		
 		mario.draw(g2, null);
@@ -179,14 +224,49 @@ public class GamePanel extends JPanel implements Runnable
 			
 			
 			if(mouseControl.isClicked(MouseEvent.BUTTON1)){
-				if(enemy1.getIsHit()){
+				
+			
+				
+
+				if (time == 0 || time >= 300) {
+				    timeOfLastProjectile = System.currentTimeMillis();
+					System.out.println("Last" + timeOfLastProjectile);
+
+					bullets.add(new Bullet("fireball.png", (int) mario.getCenterX(), (int)mario.getCenterY(), 25, 25, mX, mY));
+					
+				    // Trigger associated action
+				}
+				timeNow = System.currentTimeMillis()+1;
+				System.out.println("Now" + timeNow);
+				time = timeNow - timeOfLastProjectile;
+				System.out.println("time" + time);
+				//bullets.add(new Bullet("fireball.png", (int) mario.getCenterX(), (int)mario.getCenterY(), 25, 25, mX, mY));
+				
+			
+			}
+			
+			
+			for(Bullet b: bullets){
+				b.fire(mX, mY, screenRect);
+				
+				if(screenRect.intersects(b)){
+					b = null;
+				}
+				if(b != null && b.getBounds2D().intersects(enemy1.getBounds2D())){
+					enemy1.setIsHit(true);
+				}else{
+					enemy1.setIsHit(false);
+
+				}
+				
+			}
+			if(enemy1.getIsHit()){
 				enemy1.removeEnemy();
 				
 				}
-			}
-			
 			mario.act(obstacles);
 			enemy1.act(obstacles);
+			enemy1.hitByBullet(bullets);
 			//cmario.act(obstacles);
 
 
@@ -257,7 +337,8 @@ public class GamePanel extends JPanel implements Runnable
 			//mX = e.getX();
 			//mY = e.getY();
 			//mouses.add(e.getButton());
-			//System.out.println("hi");
+		
+			
 		}
 
 		@Override
@@ -276,7 +357,7 @@ public class GamePanel extends JPanel implements Runnable
 		public void mousePressed(MouseEvent e) {
 			// TODO Auto-generated method stub
 			mouses.add(e.getButton());
-			System.out.println("hi");
+			//System.out.println("hi");
 		}
 
 		@Override
